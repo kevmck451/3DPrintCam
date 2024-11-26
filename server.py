@@ -16,20 +16,28 @@ def handle_client(client_socket):
 
         stream = io.BytesIO()
         for _ in camera.capture_continuous(stream, format='jpeg'):
-            # Send the image length and image data
-            connection.write(struct.pack('<L', stream.tell()))
-            connection.flush()
-            stream.seek(0)
-            connection.write(stream.read())
-            stream.seek(0)
-            stream.truncate()
+            try:
+                # Send the image length and image data
+                connection.write(struct.pack('<L', stream.tell()))
+                connection.flush()
+                stream.seek(0)
+                connection.write(stream.read())
+                stream.seek(0)
+                stream.truncate()
+            except BrokenPipeError:
+                print("Client disconnected.")
+                break
     except Exception as e:
-        print(f"Client disconnected: {e}")
+        print(f"Error with client: {e}")
     finally:
-        connection.write(struct.pack('<L', 0))
+        try:
+            connection.write(struct.pack('<L', 0))  # Signal end of stream
+        except Exception:
+            pass
         connection.close()
         client_socket.close()
         camera.close()
+
 
 def server():
     """Sets up the server to accept connections."""
