@@ -30,14 +30,17 @@ def handle_client(client_socket):
     except Exception as e:
         print(f"Error with client: {e}")
     finally:
-        # Only attempt to clean up if the connection is open
         try:
+            # Attempt to close only if the socket is open
             connection.close()
-        except Exception as e:
-            print(f"Error closing connection: {e}")
-        finally:
+        except Exception:
+            pass
+        try:
             client_socket.close()
+        except Exception:
+            pass
         camera.close()
+
 
 
 
