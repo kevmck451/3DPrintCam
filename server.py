@@ -30,13 +30,15 @@ def handle_client(client_socket):
     except Exception as e:
         print(f"Error with client: {e}")
     finally:
+        # Only attempt to clean up if the connection is open
         try:
-            connection.write(struct.pack('<L', 0))  # Signal end of stream
-        except Exception:
-            pass
-        connection.close()
-        client_socket.close()
+            connection.close()
+        except Exception as e:
+            print(f"Error closing connection: {e}")
+        finally:
+            client_socket.close()
         camera.close()
+
 
 
 def server():
