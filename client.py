@@ -33,6 +33,7 @@ def client():
             else:
                 img_display.set_data(image)
 
+            plt.tight_layout(pad=0)
             plt.pause(0.01)
             plt.draw()
     except Exception as e:
