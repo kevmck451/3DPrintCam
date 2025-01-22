@@ -8,7 +8,7 @@ import sys
 
 def client():
     """Connects to the server and displays the live video stream."""
-    server_ip = '141.225.163.147'  # Replace with the server's IP address
+    server_ip = '141.225.165.144'  # Replace with the server's IP address
     client_socket = socket.socket()
     client_socket.connect((server_ip, 8000))
     connection = client_socket.makefile('rb')
